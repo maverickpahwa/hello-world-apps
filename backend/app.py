@@ -4,19 +4,19 @@ from faker import Faker
 import random
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})  # Allow all origins
+CORS(app, resources={r"/api/*": {"origins": "*"}})  # Allow all origins
 
 fake = Faker()
 
-@app.route("/")
+@app.route("/api/")
 def hello():
     return jsonify(message="Hello from Flask!")
 
-@app.route("/heartbeat")
+@app.route("/api/heartbeat")
 def heartbeat():
     return jsonify(status="running", service="flask-backend")
 
-@app.route("/generate", methods=["GET"])
+@app.route("/api/generate", methods=["GET"])
 def generate_fake_data():
     try:
         count = int(request.args.get("count", 1))  # Get value from slider (default: 1)
