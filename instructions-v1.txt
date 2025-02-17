@@ -1,0 +1,44 @@
+# Version": 1.0.0
+3?? How It Works
+?? New Features
+
+    React receives data from Flask /api/generate
+    Adds createdTime (epoch time) in React
+    Displays createdTime on the page
+    Sends updated data with createdTime to /api/save
+    Flask saves everything to CSV
+
+?? CSV Output (saved_data.csv)
+
+createdTime,fullname,age,mortality
+1700000000,John Doe,25,1
+1700000001,Jane Smith,34,0
+
+4?? Restart & Test
+
+    Restart everything:
+
+docker-compose down
+docker-compose up --build
+
+Test in Browser:
+
+    Open http://192.168.0.238:3000/
+    Move slider, click Generate
+    Click Save Data (sends to Flask)
+    Check CSV:
+
+        docker exec -it <backend-container-id> cat saved_data.csv
+
+        ? Data should now include createdTime!
+
+?? Done! Now, React is responsible for adding createdTime, and Flask just saves it. ?? Let me know if you need more changes!
+
+git add .
+git commit -m 'added epoch time and save to csv'
+git push https://maverickpahwa:$token@github.com/maverickpahwa/hello-world-apps.git
+
+
+export token=ghp
+echo $token
+
