@@ -5,7 +5,7 @@ function App() {
   const [people, setPeople] = useState([]); // Store generated data
 
   const fetchData = () => {
-    fetch(`http://192.168.0.238:5000/generate?count=${count}`)  // Replace <host-ip>
+    fetch("/api/generate?count=${count}")  // Replace <host-ip> `http://192.168.0.238:5000/generate?count=${count}`
       .then((response) => response.json())
       .then((data) => setPeople(data))
       .catch((error) => console.error("Error fetching data:", error));
