@@ -58,3 +58,8 @@ history -w ~/disk/history/history-$(date "+%Y-%m-%dT%H-%M").txt
 
 
 
+Test Persistence
+
+    Save JSON to CSV
+
+curl -X POST http://192.168.0.238:5000/api/save -H "Content-Type: application/json" -d '[{"createdTime": 1700000000, "fullname": "John Doe", "age": 30, "mortality": 0}]'

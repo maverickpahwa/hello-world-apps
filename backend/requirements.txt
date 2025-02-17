@@ -3,3 +3,4 @@ flask-cors
 faker
 pytest
 flask-testing
+flask-limiter

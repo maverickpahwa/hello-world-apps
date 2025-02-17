@@ -4,7 +4,11 @@ services:
     build: ./backend
     ports:
       - "5000:5000"
-
+    volumes:
+      - data_volume:/app/data  # Persist CSV file
+    environment:
+      - FLASK_ENV=development
+      
   frontend:
     build: ./frontend
     ports:
@@ -22,4 +26,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - backend
-      - frontend      
+      - frontend
+
+volumes:
+  data_volume:  # Define a persistent volume
