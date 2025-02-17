@@ -1,14 +1,45 @@
+// # Version": 1.0.0
 import React, { useState } from "react";
 
 function App() {
   const [count, setCount] = useState(1);  // Slider value
   const [people, setPeople] = useState([]); // Store generated data
+  const [saveStatus, setSaveStatus] = useState("");
 
   const fetchData = () => {
-    fetch(`http://192.168.0.238:5000/api/generate?count=${count}`)  // Replace <host-ip> `http://192.168.0.238:5000/generate?count=${count}`
+    fetch(`http://192.168.0.238:5000/api/generate?count=${count}`)
       .then((response) => response.json())
-      .then((data) => setPeople(data))
+      .then((data) => {
+        // Add createdTime (epoch time) in React
+        const updatedData = data.map(person => ({
+          ...person,
+          createdTime: Math.floor(Date.now() / 1000)  // Current epoch time
+        }));
+        setPeople(updatedData);
+      })
       .catch((error) => console.error("Error fetching data:", error));
+  };
+
+  const saveData = async () => {
+    try {
+      const response = await fetch("http://192.168.0.238:5000/api/save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(people),  // Send updated data with createdTime
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        setSaveStatus(`Saved ${result.saved_count} entries successfully!`);
+      } else {
+        setSaveStatus(`Error: ${result.error}`);
+      }
+    } catch (error) {
+      console.error("Error saving data:", error);
+      setSaveStatus("Error saving data");
+    }
   };
 
   return (
@@ -27,14 +58,19 @@ function App() {
       <br /><br />
 
       <button onClick={fetchData}>Generate</button>
+      <button onClick={saveData} style={{ marginLeft: "10px" }}>Save Data</button>
 
       <ul>
         {people.map((person, index) => (
           <li key={index}>
-            <strong>{person.fullname}</strong> - Age: {person.age} - Mortality: {person.mortality}
+            <strong>{person.fullname}</strong> - Age: {person.age} - Mortality: {person.mortality}  
+            <br />
+            <small>Created Time: {new Date(person.createdTime * 1000).toLocaleString()}</small>
           </li>
         ))}
       </ul>
+
+      {saveStatus && <p>{saveStatus}</p>}
     </div>
   );
 }
